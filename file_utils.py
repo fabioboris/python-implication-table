@@ -5,7 +5,7 @@ from state import State
 from type_aliases import InputMatrix
 
 
-def open_file(file_name: str) -> InputMatrix:
+def get_input_from_file(file_name: str) -> InputMatrix:
     output: InputMatrix = []
 
     file = open(file_name, encoding="utf8")
@@ -20,7 +20,7 @@ def open_file(file_name: str) -> InputMatrix:
     return output
 
 
-def save_file(file_name: str, input: list[State]):
+def save_states_to_file(file_name: str, input: list[State]):
     rows: list[str] = []
 
     for state in input:
