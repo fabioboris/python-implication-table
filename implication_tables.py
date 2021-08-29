@@ -16,7 +16,7 @@ def create_states_table(input_matrix: InputMatrix) -> StatesTable:
     return states
 
 
-def create_implication_table(states) -> ImplicationTable:
+def implication_table_from_states(states) -> ImplicationTable:
     """Create the states table from the objects"""
 
     table = {}
@@ -44,7 +44,7 @@ def search_non_eq_states(table: ImplicationTable):
                 print(f"{key}: {cell.not_eq}")
 
 
-def search_non_eq_next_states(table: ImplicationTable):
+def search_non_eq_states_on_vacant_cells(table: ImplicationTable):
     """Search on vacant cells for non equivalent cell on next states"""
 
     if DEBUG:
@@ -58,24 +58,25 @@ def search_non_eq_next_states(table: ImplicationTable):
         found = 0
         for key, cell in table.items():
             if not cell.eq and not cell.not_eq:
-                _key1 = tuple(sorted((cell.row.x0, cell.column.x0)))
-                _key2 = tuple(sorted((cell.row.x1, cell.column.x1)))
+                _keys = [(cell.row.x0, cell.column.x0),
+                         (cell.row.x1, cell.column.x1)]
 
-                if table[_key1].not_eq:
-                    cell.not_eq = True
-                    found += 1
-                elif table[_key2].not_eq:
-                    cell.not_eq = True
-                    found += 1
+                _keys = list(map(lambda _key: tuple(sorted(_key)), _keys))
+
+                for _key in _keys:
+                    if table[_key].not_eq:
+                        cell.not_eq = True
+                        found += 1
 
                 if DEBUG:
-                    print(f"{key} -> {_key1}, {_key2}: {cell.not_eq}")
+                    __keys = ", ".join(map(lambda _key: str(_key), _keys))
+                    print(f"{key} -> {__keys} : {cell.not_eq}")
 
         if found == 0:
             do_search = False
 
 
-def search_eq_states(table: ImplicationTable):
+def search_eq_states_on_vacant_cells(table: ImplicationTable):
     """Mark vacant cells as equivalent"""
 
     if DEBUG:
@@ -89,7 +90,7 @@ def search_eq_states(table: ImplicationTable):
                 print(f"{key}: {cell.eq}")
 
 
-def remove_eq_states(table: ImplicationTable, states: StatesTable):
+def remove_remaining_eq_states(table: ImplicationTable, states: StatesTable):
     """Remove the remaining equivalent states"""
 
     if DEBUG:
