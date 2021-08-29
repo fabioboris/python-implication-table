@@ -37,7 +37,7 @@ def search_non_eq_states(table: ImplicationTable):
         print("\n\nSearch for non equivalent cells:\n")
 
     for key, cell in table.items():
-        if (cell.left.y0 != cell.right.y0 or cell.left.y1 != cell.right.y1):
+        if (cell.row.y0 != cell.column.y0 or cell.row.y1 != cell.column.y1):
             cell.not_eq = True
 
             if DEBUG and key[0] != key[1]:
@@ -58,8 +58,8 @@ def search_non_eq_next_states(table: ImplicationTable):
         found = 0
         for key, cell in table.items():
             if not cell.eq and not cell.not_eq:
-                _key1 = tuple(sorted((cell.left.x0, cell.right.x0)))
-                _key2 = tuple(sorted((cell.left.x1, cell.right.x1)))
+                _key1 = tuple(sorted((cell.row.x0, cell.column.x0)))
+                _key2 = tuple(sorted((cell.row.x1, cell.column.x1)))
 
                 if table[_key1].not_eq:
                     cell.not_eq = True
