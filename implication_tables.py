@@ -7,7 +7,7 @@ from type_aliases import ImplicationTable, InputMatrix, StatesTable
 def create_states_table(input_matrix: InputMatrix) -> StatesTable:
     """Create the state objects list from the inputs table"""
 
-    states = []
+    states: StatesTable = []
 
     for index, row in enumerate(input_matrix):
         _x0, _y0, _x1, _y1 = row
@@ -19,7 +19,7 @@ def create_states_table(input_matrix: InputMatrix) -> StatesTable:
 def implication_table_from_states(states) -> ImplicationTable:
     """Create the states table from the objects"""
 
-    table = {}
+    table: ImplicationTable = {}
 
     for i in range(len(states)):
         for j in range(i, len(states)):
@@ -58,9 +58,11 @@ def search_non_eq_states_on_vacant_cells(table: ImplicationTable):
         found = 0
         for key, cell in table.items():
             if not cell.eq and not cell.not_eq:
+                # states table keys to do search
                 _keys = [(cell.row.x0, cell.column.x0),
                          (cell.row.x1, cell.column.x1)]
 
+                # sort items to ensure right states combinations
                 _keys = list(map(lambda _key: tuple(sorted(_key)), _keys))
 
                 for _key in _keys:
